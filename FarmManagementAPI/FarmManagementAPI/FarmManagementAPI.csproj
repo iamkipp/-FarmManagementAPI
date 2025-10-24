@@ -24,10 +24,4 @@
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="FarmManagement.Core\Interfaces\" />
-    <Folder Include="FarmManagement.Infrastructure\" />
-    <Folder Include="FarmManagement.API\" />
-  </ItemGroup>
-
 </Project>
