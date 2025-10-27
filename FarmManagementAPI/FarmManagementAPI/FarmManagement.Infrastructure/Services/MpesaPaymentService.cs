@@ -1,10 +1,11 @@
-﻿using Safaricom.Daraja;
-using Safaricom.Daraja.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using FarmManagementAPI.FarmManagement.Core.Entities;
 using FarmManagement.Core.Interfaces;
-using FarmManagement.Shared.Dtos;
-using FarmManagement.Core.Entities;
-using FarmManagement.Infrastructure.Data;
+using FarmManagementAPI.FarmManagement.Core.Interfaces.IServices;
+using FarmManagementAPI.FarmManagement.Infrastructure.Data;
+using FarmManagementAPI.FarmManagement.Shared.Dtos;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using FarmManagementAPI.FarmManagement.Core.Interfaces;
 
 namespace FarmManagement.Infrastructure.Services;
 
@@ -38,46 +39,38 @@ public class MpesaPaymentService : IPaymentService
             if (user?.Subscription == null)
                 return new PaymentResponseDto { Success = false, Message = "User or subscription not found" };
 
-            // Validate phone number format
+            // Validate phone number
             if (!paymentDto.PhoneNumber.StartsWith("254") || paymentDto.PhoneNumber.Length != 12)
                 return new PaymentResponseDto { Success = false, Message = "Phone number must be in format 254XXXXXXXXX" };
 
-            // Check if user already has a pending payment
+            // Check pending payment
             if (!string.IsNullOrEmpty(user.Subscription.PendingCheckoutRequestId))
-                return new PaymentResponseDto { Success = false, Message = "You already have a pending payment. Please complete or cancel it first." };
+                return new PaymentResponseDto { Success = false, Message = "You already have a pending payment" };
 
-            // Use configured amount or default to 500
             var amount = paymentDto.Amount > 0 ? paymentDto.Amount : 500;
 
-            // Prepare STK push request
-            var stkPushRequest = new StkPushRequest
+            // Create STK push request
+            var stkRequest = new StkPushRequest
             {
                 BusinessShortCode = _config["Mpesa:BusinessShortCode"]!,
-                TransactionType = TransactionType.CustomerPayBillOnline,
                 Amount = amount,
                 PartyA = paymentDto.PhoneNumber,
                 PartyB = _config["Mpesa:BusinessShortCode"]!,
                 PhoneNumber = paymentDto.PhoneNumber,
                 CallBackURL = $"{_config["BaseUrl"]}/api/payments/callback",
                 AccountReference = string.IsNullOrEmpty(paymentDto.AccountReference) ? user.Email : paymentDto.AccountReference,
-                TransactionDesc = "Farm Management Monthly Subscription"
+                TransactionDesc = "Farm Management Subscription"
             };
 
-            _logger.LogInformation($"Initiating STK push for user {user.Email}, Amount: {amount}");
-
-            // Initiate STK push
-            var response = await _mpesaClient.StkPushRequestAsync(stkPushRequest);
+            var response = await _mpesaClient.StkPushRequestAsync(stkRequest);
 
             if (response.ResponseCode == "0")
             {
-                // Store pending payment info in subscription
                 user.Subscription.PendingCheckoutRequestId = response.CheckoutRequestID;
                 user.Subscription.PendingPaymentDate = DateTime.UtcNow;
                 user.Subscription.LastPaymentPhoneNumber = paymentDto.PhoneNumber;
 
                 await _context.SaveChangesAsync();
-
-                _logger.LogInformation($"STK push initiated successfully for user {user.Email}, CheckoutRequestID: {response.CheckoutRequestID}");
 
                 return new PaymentResponseDto
                 {
@@ -90,11 +83,10 @@ public class MpesaPaymentService : IPaymentService
             }
             else
             {
-                _logger.LogError($"M-Pesa STK push failed for user {user.Email}: {response.ResponseDescription}");
                 return new PaymentResponseDto
                 {
                     Success = false,
-                    Message = $"Payment initiation failed: {response.ResponseDescription}"
+                    Message = response.ResponseDescription
                 };
             }
         }
@@ -196,13 +188,6 @@ public class MpesaPaymentService : IPaymentService
         }
     }
 
-    public async Task<IEnumerable<Payment>> GetUserPaymentHistoryAsync(Guid userId)
-    {
-        // Since we're not using a separate Payment entity, return empty list
-        // You can create payment records from subscription history if needed later
-        return await Task.FromResult(Enumerable.Empty<Payment>());
-    }
-
     public async Task<bool> IsPaymentPendingAsync(Guid userId)
     {
         var user = await _context.Users
@@ -210,5 +195,39 @@ public class MpesaPaymentService : IPaymentService
             .FirstOrDefaultAsync(u => u.Id == userId);
 
         return user?.Subscription?.PendingCheckoutRequestId != null;
+    }
+
+    public async Task<IEnumerable<PaymentHistoryDto>> GetUserPaymentHistoryAsync(Guid userId)
+    {
+        var user = await _context.Users
+            .Include(u => u.Subscription)
+            .FirstOrDefaultAsync(u => u.Id == userId);
+
+        if (user?.Subscription == null)
+            return Enumerable.Empty<PaymentHistoryDto>();
+
+        var paymentHistory = new List<PaymentHistoryDto>();
+
+        // Add subscription payment history
+        if (user.Subscription.LastPaymentDate.HasValue)
+        {
+            paymentHistory.Add(new PaymentHistoryDto
+            {
+                Id = Guid.NewGuid(),
+                Amount = user.Subscription.LastPaymentAmount ?? 500,
+                Status = "Completed",
+                MpesaReceiptNumber = user.Subscription.LastMpesaReceiptNumber,
+                CreatedAt = user.Subscription.LastPaymentDate.Value,
+                CompletedAt = user.Subscription.LastPaymentDate.Value,
+                PhoneNumber = user.Subscription.LastPaymentPhoneNumber ?? user.PhoneNumber
+            });
+        }
+
+        return paymentHistory.OrderByDescending(p => p.CreatedAt);
+    }
+
+    Task<IEnumerable<Payment>> IPaymentService.GetUserPaymentHistoryAsync(Guid userId)
+    {
+        throw new NotImplementedException();
     }
 }

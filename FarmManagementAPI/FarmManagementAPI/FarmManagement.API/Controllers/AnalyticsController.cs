@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FarmManagement.Core.Interfaces;
+using FarmManagementAPI.FarmManagement.Core.Interfaces.IServices;
+using FarmManagementAPI.FarmManagement.Shared.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 

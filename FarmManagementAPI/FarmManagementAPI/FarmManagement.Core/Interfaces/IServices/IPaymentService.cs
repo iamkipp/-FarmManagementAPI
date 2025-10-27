@@ -1,7 +1,7 @@
-﻿using FarmManagement.Shared.Dtos;
-using FarmManagement.Core.Entities;
+﻿using FarmManagementAPI.FarmManagement.Shared.Dtos;
+using FarmManagementAPI.FarmManagement.Core.Entities;
 
-namespace FarmManagement.Core.Interfaces;
+namespace FarmManagementAPI.FarmManagement.Core.Interfaces.IServices;
 
 public interface IPaymentService
 {

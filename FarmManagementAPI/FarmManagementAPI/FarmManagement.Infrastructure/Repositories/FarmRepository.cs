@@ -1,18 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using FarmManagement.Core.Entities;
+using FarmManagementAPI.FarmManagement.Core.Entities;
 using FarmManagement.Core.Interfaces;
-using FarmManagement.Infrastructure.Data;
+using FarmManagementAPI.FarmManagement.Infrastructure.Data;
 
 namespace FarmManagement.Infrastructure.Repositories;
 
-public class FarmRepository : IFarmRepository
+public class FarmRepository(ApplicationDbContext context) : IFarmRepository
 {
-    private readonly ApplicationDbContext _context;
-
-    public FarmRepository(ApplicationDbContext context)
-    {
-        _context = context;
-    }
+    private readonly ApplicationDbContext _context = context;
 
     public async Task<IEnumerable<Farm>> GetFarmsByUserIdAsync(Guid userId)
     {

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FarmManagementAPI.FarmManagement.Core.Entities;
+using FarmManagement.Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -9,7 +11,7 @@ public class FarmController : ControllerBase
 {
     private readonly IFarmRepository _farmRepository;
 
-    public FarmsController(IFarmRepository farmRepository)
+    public FarmController(IFarmRepository farmRepository)
     {
         _farmRepository = farmRepository;
     }

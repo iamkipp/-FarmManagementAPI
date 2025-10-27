@@ -1,31 +1,24 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
-using FarmManagement.Core.Interfaces;
-using FarmManagement.Shared.Dtos;
-using FarmManagement.Core.Entities;
-using FarmManagement.Infrastructure.Data;
+using FarmManagementAPI.FarmManagement.Infrastructure.Data;
+using FarmManagementAPI.FarmManagement.Core.Interfaces.IServices;
+using FarmManagementAPI.FarmManagement.Shared.Dtos;
+using FarmManagementAPI.FarmManagement.Core.Entities;
+using FarmManagementAPI.FarmManagement.Core.Interfaces.Repositories;
 
-namespace FarmManagement.Infrastructure.Services;
+namespace FarmManagementAPI.FarmManagement.Infrastructure.Services;
 
-public class AuthService : IAuthService
+public class AuthService(
+    IUserRepository userRepository,
+    ITokenService tokenService,
+    ApplicationDbContext context,
+    ILogger<AuthService> logger) : IAuthService
 {
-    private readonly IUserRepository _userRepository;
-    private readonly ITokenService _tokenService;
-    private readonly ApplicationDbContext _context;
-    private readonly ILogger<AuthService> _logger;
-
-    public AuthService(
-        IUserRepository userRepository,
-        ITokenService tokenService,
-        ApplicationDbContext context,
-        ILogger<AuthService> logger)
-    {
-        _userRepository = userRepository;
-        _tokenService = tokenService;
-        _context = context;
-        _logger = logger;
-    }
+    private readonly IUserRepository _userRepository = userRepository;
+    private readonly ITokenService _tokenService = tokenService;
+    private readonly ApplicationDbContext _context = context;
+    private readonly ILogger<AuthService> _logger = logger;
 
     public async Task<UserDto> RegisterAsync(RegisterDto registerDto)
     {

@@ -1,4 +1,5 @@
-﻿public class InitiatePaymentDto
+﻿namespace FarmManagementAPI.FarmManagement.Shared.Dtos;
+public class InitiatePaymentDto
 {
     public string PhoneNumber { get; set; } = string.Empty; // Format: 2547XXXXXXXX
     public decimal Amount { get; set; } = 500; // Fixed monthly fee

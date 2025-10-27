@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FarmManagementAPI.FarmManagement.Shared.Dtos;
+using FarmManagementAPI.FarmManagement.Core.Interfaces.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using FarmManagementAPI.FarmManagement.Core.Interfaces.IServices;
 
 [ApiController]
 [Route("api/[controller]")]

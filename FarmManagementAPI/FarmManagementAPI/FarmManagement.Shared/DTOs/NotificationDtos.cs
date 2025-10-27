@@ -1,4 +1,5 @@
-﻿public class SmsMessageDto
+﻿namespace FarmManagementAPI.FarmManagement.Shared.Dtos;
+public class SmsMessageDto
 {
     public string PhoneNumber { get; set; } = string.Empty;
     public string Message { get; set; } = string.Empty;

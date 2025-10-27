@@ -1,4 +1,5 @@
-﻿public class RevenueReportDto
+﻿namespace FarmManagementAPI.FarmManagement.Shared.Dtos;
+public class RevenueReportDto
 {
     public decimal TotalRevenue { get; set; }
     public decimal AverageRevenue { get; set; }

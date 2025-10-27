@@ -1,4 +1,7 @@
-﻿public class FarmRecord
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace FarmManagementAPI.FarmManagement.Core.Entities;
+public class FarmRecord
 {
     public Guid Id { get; set; }
     public DateTime RecordDate { get; set; }

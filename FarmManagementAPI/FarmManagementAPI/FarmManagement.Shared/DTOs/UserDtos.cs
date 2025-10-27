@@ -1,4 +1,4 @@
-﻿// UserDtos.cs
+﻿namespace FarmManagementAPI.FarmManagement.Shared.Dtos;
 public class RegisterDto
 {
     public string Email { get; set; } = string.Empty;

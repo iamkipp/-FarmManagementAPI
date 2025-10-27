@@ -1,4 +1,4 @@
-﻿namespace FarmManagement.Core.Interfaces;
+﻿namespace FarmManagementAPI.FarmManagement.Core.Interfaces.IServices;
 
 public interface IMpesaService
 {

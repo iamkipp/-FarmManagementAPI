@@ -1,6 +1,6 @@
-﻿using FarmManagement.Shared.Dtos;
-
-namespace FarmManagement.Core.Interfaces;
+﻿
+using FarmManagementAPI.FarmManagement.Shared.Dtos;
+namespace FarmManagementAPI.FarmManagement.Core.Interfaces.IServices;
 
 public interface IAdminService
 {

@@ -1,4 +1,4 @@
-﻿using FarmManagement.Core.Entities;
+﻿using FarmManagementAPI.FarmManagement.Core.Entities;
 
 namespace FarmManagement.Core.Interfaces;
 

@@ -1,4 +1,5 @@
-﻿public class FarmSummaryDto
+﻿namespace FarmManagementAPI.FarmManagement.Shared.Dtos;
+public class FarmSummaryDto
 {
     public int TotalFarms { get; set; }
     public decimal TotalYield { get; set; }
@@ -51,4 +52,5 @@ public class SubscriptionStatusDto
     public int DaysRemaining { get; set; }
     public DateTime? LastPaymentDate { get; set; }
     public decimal? LastPaymentAmount { get; set; }
+    public bool HasPendingPayment { get; internal set; }
 }

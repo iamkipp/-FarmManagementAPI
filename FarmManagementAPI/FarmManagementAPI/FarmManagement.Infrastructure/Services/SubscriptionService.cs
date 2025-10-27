@@ -1,21 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using FarmManagement.Core.Interfaces;
-using FarmManagement.Shared.Dtos;
-using FarmManagement.Core.Entities;
-using FarmManagement.Infrastructure.Data;
+using FarmManagementAPI.FarmManagement.Core.Interfaces;
+using FarmManagementAPI.FarmManagement.Shared.Dtos;
+using FarmManagementAPI.FarmManagement.Infrastructure.Data;
+using FarmManagementAPI.FarmManagement.Core.Interfaces.IServices;
 
-namespace FarmManagement.Infrastructure.Services;
+namespace FarmManagementAPI.FarmManagement.Infrastructure.Services;
 
-public class SubscriptionService : ISubscriptionService
+public class SubscriptionService(ApplicationDbContext context, ILogger<SubscriptionService> logger) : ISubscriptionService
 {
-    private readonly ApplicationDbContext _context;
-    private readonly ILogger<SubscriptionService> _logger;
-
-    public SubscriptionService(ApplicationDbContext context, ILogger<SubscriptionService> logger)
-    {
-        _context = context;
-        _logger = logger;
-    }
+    private readonly ApplicationDbContext _context = context;
+    private readonly ILogger<SubscriptionService> _logger = logger;
 
     public async Task<SubscriptionStatusDto> GetSubscriptionStatusAsync(Guid userId)
     {

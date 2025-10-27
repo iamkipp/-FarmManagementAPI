@@ -1,6 +1,6 @@
-﻿using FarmManagement.Core.Entities;
+﻿using FarmManagementAPI.FarmManagement.Core.Entities;
 
-namespace FarmManagement.Core.Interfaces;
+namespace FarmManagementAPI.FarmManagement.Core.Interfaces.IServices;
 
 public interface ITokenService
 {

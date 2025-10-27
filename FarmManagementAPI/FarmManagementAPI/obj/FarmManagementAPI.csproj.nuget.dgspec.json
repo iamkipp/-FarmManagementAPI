@@ -86,9 +86,21 @@
               "target": "Package",
               "version": "[9.0.0, )"
             },
+            "MpesaDarajaSDK": {
+              "target": "Package",
+              "version": "[1.0.18, )"
+            },
+            "MpesaSdk": {
+              "target": "Package",
+              "version": "[1.0.30, )"
+            },
+            "Scalar.AspNetCore": {
+              "target": "Package",
+              "version": "[2.0.14, )"
+            },
             "System.IdentityModel.Tokens.Jwt": {
               "target": "Package",
-              "version": "[8.0.0, )"
+              "version": "[8.0.1, )"
             }
           },
           "imports": [

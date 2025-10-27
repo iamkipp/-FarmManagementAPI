@@ -1,4 +1,6 @@
-﻿using FarmManagementAPI.FarmManagement.Core.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace FarmManagementAPI.FarmManagement.Core.Entities;
 public class User
 {
     public Guid Id { get; set; }

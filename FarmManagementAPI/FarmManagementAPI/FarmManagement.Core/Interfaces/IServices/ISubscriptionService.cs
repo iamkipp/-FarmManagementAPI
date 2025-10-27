@@ -1,6 +1,7 @@
-﻿using FarmManagement.Shared.Dtos;
+﻿
+using FarmManagementAPI.FarmManagement.Shared.Dtos;
 
-namespace FarmManagement.Core.Interfaces;
+namespace FarmManagementAPI.FarmManagement.Core.Interfaces.IServices;
 
 public interface ISubscriptionService
 {

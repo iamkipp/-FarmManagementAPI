@@ -1,18 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using FarmManagement.Core.Entities;
+using FarmManagementAPI.FarmManagement.Core.Entities;
 using FarmManagement.Core.Interfaces;
-using FarmManagement.Infrastructure.Data;
+using FarmManagementAPI.FarmManagement.Infrastructure.Data;
 
-namespace FarmManagement.Infrastructure.Repositories;
+namespace FarmManagementAPI.FarmManagement.Infrastructure.Repositories;
 
-public class SubscriptionRepository : ISubscriptionRepository
+public class SubscriptionRepository(ApplicationDbContext context) : ISubscriptionRepository
 {
-    private readonly ApplicationDbContext _context;
-
-    public SubscriptionRepository(ApplicationDbContext context)
-    {
-        _context = context;
-    }
+    private readonly ApplicationDbContext _context = context;
 
     public async Task<Subscription?> GetSubscriptionByUserIdAsync(Guid userId)
     {

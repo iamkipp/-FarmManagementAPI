@@ -1,4 +1,5 @@
-﻿public class SystemAnalyticsDto
+﻿namespace FarmManagementAPI.FarmManagement.Shared.Dtos;
+public class SystemAnalyticsDto
 {
     public int TotalUsers { get; set; }
     public int TotalFarms { get; set; }
@@ -7,7 +8,7 @@
     public int TrialUsers { get; set; }
     public decimal TotalRevenue { get; set; }
     public decimal MonthlyRecurringRevenue { get; set; }
-    public IEnumerable<UserGrowthDto> UserGrowth { get; set; } = new List<UserGrowthDto>();
+    public IEnumerable<UserGrowthDto> UserGrowth { get; set; } = [];
 }
 
 public class SubscriptionReportDto
