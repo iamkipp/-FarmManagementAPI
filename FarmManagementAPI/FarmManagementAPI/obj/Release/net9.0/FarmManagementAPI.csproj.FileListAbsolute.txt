@@ -1,9 +1,0 @@
-C:\Users\kimmv\source\repos\-FarmManagementAPI\FarmManagementAPI\FarmManagementAPI\obj\Release\net9.0\FarmManagementAPI.csproj.AssemblyReference.cache
-C:\Users\kimmv\source\repos\-FarmManagementAPI\FarmManagementAPI\FarmManagementAPI\obj\Release\net9.0\rpswa.dswa.cache.json
-C:\Users\kimmv\source\repos\-FarmManagementAPI\FarmManagementAPI\FarmManagementAPI\obj\Release\net9.0\FarmManagementAPI.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\kimmv\source\repos\-FarmManagementAPI\FarmManagementAPI\FarmManagementAPI\obj\Release\net9.0\FarmManagementAPI.AssemblyInfoInputs.cache
-C:\Users\kimmv\source\repos\-FarmManagementAPI\FarmManagementAPI\FarmManagementAPI\obj\Release\net9.0\FarmManagementAPI.AssemblyInfo.cs
-C:\Users\kimmv\source\repos\-FarmManagementAPI\FarmManagementAPI\FarmManagementAPI\obj\Release\net9.0\FarmManagementAPI.csproj.CoreCompileInputs.cache
-C:\Users\kimmv\source\repos\-FarmManagementAPI\FarmManagementAPI\FarmManagementAPI\obj\Release\net9.0\FarmManagementAPI.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\kimmv\source\repos\-FarmManagementAPI\FarmManagementAPI\FarmManagementAPI\obj\Release\net9.0\FarmManagementAPI.MvcApplicationPartsAssemblyInfo.cache
-C:\Users\kimmv\source\repos\-FarmManagementAPI\FarmManagementAPI\FarmManagementAPI\obj\Release\net9.0\FarmManagementAPI.sourcelink.json
