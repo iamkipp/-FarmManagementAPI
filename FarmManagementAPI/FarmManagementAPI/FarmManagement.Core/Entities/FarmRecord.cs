@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace FarmManagementAPI.FarmManagement.Core.Entities;
+﻿namespace FarmManagementAPI.FarmManagement.Core.Entities;
 public class FarmRecord
 {
     public Guid Id { get; set; }

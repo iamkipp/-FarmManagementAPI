@@ -6,7 +6,7 @@ public class StkPushRequest
     public string Password { get; set; } = string.Empty;
     public string Timestamp { get; set; } = string.Empty;
     public string TransactionType { get; set; } = string.Empty;
-    public decimal Amount { get; set; }
+    public string Amount { get; set; }
     public string PartyA { get; set; } = string.Empty;
     public string PartyB { get; set; } = string.Empty;
     public string PhoneNumber { get; set; } = string.Empty;

@@ -1,5 +1,4 @@
-﻿using FarmManagement.Core.Interfaces;
-using FarmManagementAPI.FarmManagement.Shared.Dtos;
+﻿using FarmManagementAPI.FarmManagement.Shared.Dtos;
 using FarmManagementAPI.FarmManagement.Core.Entities;
 using FarmManagementAPI.FarmManagement.Core.Interfaces.Repositories;
 using Microsoft.AspNetCore.Authorization;

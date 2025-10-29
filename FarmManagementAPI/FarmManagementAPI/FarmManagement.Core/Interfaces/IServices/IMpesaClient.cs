@@ -1,10 +1,11 @@
 ﻿using FarmManagementAPI.FarmManagement.Shared.Dtos;
+using System.Threading.Tasks;
 
-
-namespace FarmManagementAPI.FarmManagement.Core.Interfaces;
-
-public interface IMpesaClient
+namespace FarmManagementAPI.FarmManagement.Core.Interfaces.IServices
 {
-    Task<StkPushResponse> StkPushRequestAsync(StkPushRequest request); // ✅ Must return StkPushResponse
-    Task<string> GetAccessTokenAsync();
+    public interface IMpesaClient
+    {
+        Task<string> GetAccessTokenAsync();
+        Task<StkPushResponse> StkPushRequestAsync(StkPushRequest request);
+    }
 }

@@ -1,10 +1,16 @@
-﻿using FarmManagementAPI.FarmManagement.Shared.Dtos;
+﻿using FarmManagementAPI.FarmManagement.Core.Interfaces.IServices;
+using FarmManagementAPI.FarmManagement.Shared.Dtos;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace FarmManagementAPI.FarmManagement.Infrastructure.Services
 {
-    public class ManualMpesaClient
+    public class ManualMpesaClient : IMpesaClient
     {
         private readonly IConfiguration _config;
         private readonly IHttpClientFactory _httpClientFactory;
@@ -20,6 +26,7 @@ namespace FarmManagementAPI.FarmManagement.Infrastructure.Services
             _logger = logger;
         }
 
+        // ✅ STEP 1: Get M-Pesa Access Token
         public async Task<string> GetAccessTokenAsync()
         {
             try
@@ -29,7 +36,6 @@ namespace FarmManagementAPI.FarmManagement.Infrastructure.Services
                 var consumerSecret = _config["Mpesa:ConsumerSecret"]!;
 
                 var authString = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{consumerKey}:{consumerSecret}"));
-
                 client.DefaultRequestHeaders.Add("Authorization", $"Basic {authString}");
 
                 var baseUrl = _config["Mpesa:Environment"] == "Production"
@@ -46,6 +52,7 @@ namespace FarmManagementAPI.FarmManagement.Infrastructure.Services
 
                 var content = await response.Content.ReadAsStringAsync();
                 var tokenResponse = JsonSerializer.Deserialize<JsonElement>(content);
+
                 return tokenResponse.GetProperty("access_token").GetString()!;
             }
             catch (Exception ex)
@@ -55,6 +62,27 @@ namespace FarmManagementAPI.FarmManagement.Infrastructure.Services
             }
         }
 
+        // ✅ STEP 2: Reusable HTTP Helper (with Authorization header)
+        private static async Task<string> MakeAuthorizedRequestAsync(string url, string method, string token, string? body = null)
+        {
+            using var client = new HttpClient();
+            using var request = new HttpRequestMessage(new HttpMethod(method), url);
+
+            request.Headers.Add("Authorization", $"Bearer {token}");
+            request.Headers.Add("Accept", "application/json");
+
+            if (!string.IsNullOrEmpty(body) && (method == "POST" || method == "PUT"))
+            {
+                request.Content = new StringContent(body, Encoding.UTF8, "application/json");
+            }
+
+            var response = await client.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadAsStringAsync();
+        }
+
+        // ✅ STEP 3: Send STK Push Request
         public async Task<StkPushResponse> StkPushRequestAsync(StkPushRequest request)
         {
             try
@@ -69,31 +97,21 @@ namespace FarmManagementAPI.FarmManagement.Infrastructure.Services
                     };
                 }
 
-                var client = _httpClientFactory.CreateClient();
-                client.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
-
                 var baseUrl = _config["Mpesa:Environment"] == "Production"
                     ? "https://api.safaricom.co.ke"
                     : "https://sandbox.safaricom.co.ke";
 
+                var url = $"{baseUrl}/mpesa/stkpush/v1/processrequest";
                 var json = JsonSerializer.Serialize(request);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                var response = await client.PostAsync($"{baseUrl}/mpesa/stkpush/v1/processrequest", content);
-                var responseContent = await response.Content.ReadAsStringAsync();
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    _logger.LogError($"STK push failed: {responseContent}");
-                    return new StkPushResponse
-                    {
-                        ResponseCode = "1",
-                        ResponseDescription = "STK push request failed"
-                    };
-                }
+                var responseContent = await MakeAuthorizedRequestAsync(url, "POST", accessToken, json);
 
                 var result = JsonSerializer.Deserialize<StkPushResponse>(responseContent);
-                return result ?? new StkPushResponse { ResponseCode = "1", ResponseDescription = "Failed to parse response" };
+                return result ?? new StkPushResponse
+                {
+                    ResponseCode = "1",
+                    ResponseDescription = "Failed to parse STK push response"
+                };
             }
             catch (Exception ex)
             {

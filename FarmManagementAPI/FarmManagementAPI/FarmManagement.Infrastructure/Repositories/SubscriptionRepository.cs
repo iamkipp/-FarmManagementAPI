@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using FarmManagementAPI.FarmManagement.Core.Entities;
-using FarmManagement.Core.Interfaces;
 using FarmManagementAPI.FarmManagement.Infrastructure.Data;
+using FarmManagementAPI.FarmManagement.Core.Interfaces.Repositories;
 
 namespace FarmManagementAPI.FarmManagement.Infrastructure.Repositories;
 

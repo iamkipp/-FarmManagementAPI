@@ -1,6 +1,6 @@
 ﻿using FarmManagementAPI.FarmManagement.Core.Entities;
 
-namespace FarmManagement.Core.Interfaces;
+namespace FarmManagementAPI.FarmManagement.Core.Interfaces.Repositories;
 
 public interface IFarmRepository
 {
